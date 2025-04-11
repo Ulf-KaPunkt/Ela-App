@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Songauswahl</title>
+  <style>
+    body {
+      background-color: black;
+      color: #e3b341;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .song-display {
+      font-size: 2em;
+      margin: 20px 0;
+    }
+    .all-songs {
+      margin-top: 40px;
+      font-size: 0.9em;
+    }
+    #logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 100px;
+    }
+    button {
+      background-color: #e3b341;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <img id="logo" src="rockreloaded-logo-final.png" alt="Logo">
+  <h1>🎸 Proben-App</h1>
+  <p>Songauswahl ohne Wiederholung der letzten 5</p>
+  <div class="song-display" id="selectedSong">🎵</div>
+  <button onclick="selectRandomSong()">🎲 Zufall wählen</button>
+  <div class="all-songs" id="allSongsList"></div>
+  <script>
+    const allSongs = [
+      "Talking ‘bout a Revolution – Tracy Chapman", "This Is the Life – Amy Macdonald", "Mr. Rock & Roll – Amy Macdonald",
+      "Another Cup of Coffee – Mike & The Mechanics", "Runaway Train – Soul Asylum", "Losing My Religion – R.E.M.",
+      "Like the Way I Do – Melissa Etheridge", "Because the Night – Patti Smith", "These Boots Are Made for Walkin’ – Nancy Sinatra",
+      "Beast of Burden – Bette Midler", "Mr. Jones – Counting Crows", "Friday I’m in Love – The Cure",
+      "Let It Rain – Amanda Marshall", "Sunday Bloody Sunday – U2", "Sleeping in My Car – Roxette",
+      "Let Me Entertain You – Robbie Williams", "Westerland – Die Ärzte", "I’m Gonna Be (500 Miles) – The Proclaimers",
+      "Summer of ‘69 – Bryan Adams", "99 Luftballons – Nena", "Torn – Natalie Imbruglia", "Ein Kompliment – Sportfreunde Stiller",
+      "Seven Nation Army – The White Stripes", "Teenage Dirtbag – Wheatus", "Du hast den Farbfilm vergessen – R. Havanna",
+      "Zombie – The Cranberries"
+    ];
+
+    const validIndices = Array.from(new Set([0,1,2,6,7,8,9,12,13,1,3,7,8,9,10,13,1,3,9,11,16,0,1,2,4,5,6,9,0,1]));
+    const lastSelected = [];
+
+    function selectRandomSong() {
+      const filtered = validIndices.filter(i => !lastSelected.includes(i));
+      const pickFrom = filtered.length ? filtered : validIndices;
+      const index = pickFrom[Math.floor(Math.random() * pickFrom.length)];
+      const song = allSongs[index];
+      lastSelected.push(index);
+      if (lastSelected.length > 5) lastSelected.shift();
+      document.getElementById("selectedSong").textContent = song;
+    }
+
+    document.getElementById("allSongsList").innerHTML =
+      "<strong>Songliste:</strong><br><br>" +
+      allSongs.map((s, i) => validIndices.includes(i) ? (i + 1) + ". " + s : "")
+      .filter(Boolean).join("<br>");
+  </script>
+</body>
+</html>
